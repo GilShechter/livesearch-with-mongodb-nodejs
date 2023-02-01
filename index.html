@@ -11,28 +11,47 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
   </head>
   <body>
-    <div
-      class="container"
-      style="
-        margin: 0 auto;
-        margin-top: 30px;
-        left: 50%;
-        background-color: lightgray;
-        height: 500px;
-        border-radius: 10px;
-        padding: 20px;
-      "
-    >
+    <div class="container">
       <h1>MoMA artists dataset</h1>
       <div class="form-group">
-        <input
-          type="text"
-          class="form-control"
-          id="searchInput"
-          placeholder="Type to search..."
-        />
+        <form>
+          <input
+            type="text"
+            class="form-control"
+            id="search"
+            placeholder="Type to search..."
+            onkeyup="searchName()"
+          />
+        </form>
+        <div class="results">
+          <ul id="list" class="list-group list-group-flush mt-4"></ul>
+          <script>
+            async function searchName() {
+              fetch("/search", {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  searchString: document.getElementById("search").value,
+                }),
+              }).then(async (res) => {
+                const results = await res.json();
+                const list = document.getElementById("list");
+                list.innerHTML = "";
+                let htmlList = "";
+                for (const item of results) {
+                  htmlList += `<li class="list-item">${item.DisplayName}</li>`;
+                  list.innerHTML = htmlList;
+                }
+              });
+            }
+          </script>
+        </div>
       </div>
     </div>
   </body>
