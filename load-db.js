@@ -19,7 +19,7 @@ async function run() {
                 
             const collection = db.collection('artists');      // Get the countries collection
 
-            collection.insertMany(artistsJSON, function(err, result) {  // Insert documents
+            collection.insert(artistsJSON, function(err, result) {  // Insert documents
                 if(err){throw err}
                 console.log(result);
                 client.close();
